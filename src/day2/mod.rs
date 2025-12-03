@@ -1,0 +1,63 @@
+use std::{error::Error, fs::read_to_string};
+
+pub fn full(file: &str) -> Result<(), Box<dyn Error>> {
+    p1(file)?;
+    p2(file)?;
+    Ok(())
+}
+
+pub fn p1(file: &str) -> Result<(), Box<dyn Error>> {
+    let file = read_to_string(file)?;
+
+    let k = file.split(",").fold(0, |mut x, s| {
+        let [a, b] = s
+            .splitn(2, "-")
+            .map(|s: &str| s.parse::<i128>().unwrap())
+            .collect::<Vec<_>>()[..]
+        else {
+            unreachable!()
+        };
+
+        x += (a..=b)
+            .filter_map(|i| {
+                let s = i.to_string();
+                let ls = s.len();
+                let (p1, p2) = s.split_at(ls / 2);
+                (p1 == p2).then_some(i)
+            })
+            .sum::<i128>();
+
+        x
+    });
+    println!("{k}");
+    Ok(())
+}
+
+pub fn p2(file: &str) -> Result<(), Box<dyn Error>> {
+    let file = read_to_string(file)?;
+
+    let k = file.split(",").fold(0, |mut x, s| {
+        let [a, b] = s
+            .splitn(2, "-")
+            .map(|s: &str| s.parse::<i128>().unwrap())
+            .collect::<Vec<_>>()[..]
+        else {
+            unreachable!()
+        };
+
+        x += (a..=b)
+            .filter_map(|i| {
+                let s = i.to_string();
+                let ls = s.len();
+
+                (1..ls)
+                    .any(|n| ls % n == 0 && s == s[..n].repeat(ls / n))
+                    .then_some(i)
+            })
+            .sum::<i128>();
+
+        return x;
+    });
+    println!("{k}");
+    Ok(())
+}
