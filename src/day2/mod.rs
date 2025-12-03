@@ -18,11 +18,11 @@ pub fn p1(file: &str) -> Result<(), Box<dyn Error>> {
             .unwrap();
 
         x += (a..=b)
-            .filter_map(|i| {
+            .filter(|i| {
                 let s = i.to_string();
                 let ls = s.len();
                 let (p1, p2) = s.split_at(ls / 2);
-                (p1 == p2).then_some(i)
+                p1 == p2
             })
             .sum::<i128>();
 
@@ -42,13 +42,11 @@ pub fn p2(file: &str) -> Result<(), Box<dyn Error>> {
             .unwrap();
 
         x += (a..=b)
-            .filter_map(|i| {
+            .filter(|i| {
                 let s = i.to_string();
                 let ls = s.len();
 
-                (1..ls)
-                    .any(|n| ls % n == 0 && s == s[..n].repeat(ls / n))
-                    .then_some(i)
+                (1..ls).any(|n| ls % n == 0 && s == s[..n].repeat(ls / n))
             })
             .sum::<i128>();
         x
