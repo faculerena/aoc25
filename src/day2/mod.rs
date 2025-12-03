@@ -6,17 +6,16 @@ pub fn full(file: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+const PARSE: fn(&str) -> i128 = |s: &str| s.parse::<i128>().unwrap();
+
 pub fn p1(file: &str) -> Result<(), Box<dyn Error>> {
     let file = read_to_string(file)?;
 
     let k = file.split(",").fold(0, |mut x, s| {
-        let [a, b] = s
-            .splitn(2, "-")
-            .map(|s: &str| s.parse::<i128>().unwrap())
-            .collect::<Vec<_>>()[..]
-        else {
-            unreachable!()
-        };
+        let (a, b) = s
+            .split_once("-")
+            .map(|(a, b)| (PARSE(a), PARSE(b)))
+            .unwrap();
 
         x += (a..=b)
             .filter_map(|i| {
@@ -37,13 +36,10 @@ pub fn p2(file: &str) -> Result<(), Box<dyn Error>> {
     let file = read_to_string(file)?;
 
     let k = file.split(",").fold(0, |mut x, s| {
-        let [a, b] = s
-            .splitn(2, "-")
-            .map(|s: &str| s.parse::<i128>().unwrap())
-            .collect::<Vec<_>>()[..]
-        else {
-            unreachable!()
-        };
+        let (a, b) = s
+            .split_once("-")
+            .map(|(a, b)| (PARSE(a), PARSE(b)))
+            .unwrap();
 
         x += (a..=b)
             .filter_map(|i| {
@@ -55,8 +51,7 @@ pub fn p2(file: &str) -> Result<(), Box<dyn Error>> {
                     .then_some(i)
             })
             .sum::<i128>();
-
-        return x;
+        x
     });
     println!("{k}");
     Ok(())
