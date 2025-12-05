@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    day3::full("src/day3/input")?;
+    day4::full("src/day4/input")?;
     Ok(())
 }
 
